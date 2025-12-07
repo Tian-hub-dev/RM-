@@ -32,7 +32,6 @@
 
 /* Private define ------------------------------------------------------------*/
 /* USER CODE BEGIN PD */
-
 /* USER CODE END PD */
 
 /* Private macro -------------------------------------------------------------*/
@@ -43,18 +42,57 @@
 /* Private variables ---------------------------------------------------------*/
 
 /* USER CODE BEGIN PV */
-
+int mode=1;
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
 void SystemClock_Config(void);
+void MODE_1 (void);
+void MODE_2 (void);
+
 /* USER CODE BEGIN PFP */
 
 /* USER CODE END PFP */
 
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
-
+void MODE_1 (void)
+ {
+	  if(HAL_GPIO_ReadPin (KEYA_GPIO_Port ,KEYA_Pin )==GPIO_PIN_SET )
+	  {
+		HAL_Delay (20);
+	    if(HAL_GPIO_ReadPin (KEYA_GPIO_Port ,KEYA_Pin )==GPIO_PIN_SET )
+	    {
+		 HAL_GPIO_TogglePin (LED_GPIO_Port ,LED_Pin );
+		 HAL_Delay (1000);
+		 mode=1;
+	    }
+     }
+}
+   void MODE_2 (void)
+   {
+	   if(HAL_GPIO_ReadPin (KEYA_GPIO_Port ,KEYA_Pin )==GPIO_PIN_SET )
+	  {
+		HAL_Delay (20);
+	    if(HAL_GPIO_ReadPin (KEYA_GPIO_Port ,KEYA_Pin )==GPIO_PIN_SET )
+	    {
+		  HAL_GPIO_WritePin (LED_GPIO_Port,LED_Pin ,GPIO_PIN_RESET );
+			mode=2;
+	    }
+     }
+	  
+	 
+	   else if(HAL_GPIO_ReadPin (KEYA_GPIO_Port ,KEYA_Pin )==GPIO_PIN_RESET )
+	  {
+		HAL_Delay (20);
+	    if(HAL_GPIO_ReadPin (KEYA_GPIO_Port ,KEYA_Pin )==GPIO_PIN_RESET )
+	    {
+		  HAL_GPIO_WritePin (LED_GPIO_Port,LED_Pin ,GPIO_PIN_SET );
+			mode=2;
+	    }
+     }
+	     
+   }
 /* USER CODE END 0 */
 
 /**
@@ -63,9 +101,9 @@ void SystemClock_Config(void);
   */
 int main(void)
 {
-
   /* USER CODE BEGIN 1 */
 
+  
   /* USER CODE END 1 */
 
   /* MCU Configuration--------------------------------------------------------*/
@@ -94,17 +132,24 @@ int main(void)
   /* USER CODE BEGIN WHILE */
   while (1)
   {
-	  if(HAL_GPIO_ReadPin (GPIOA,KEYA_Pin ) == GPIO_PIN_SET )
+	  if(HAL_GPIO_ReadPin (KEYB_GPIO_Port ,KEYB_Pin )==GPIO_PIN_SET )
 	  {
-		  HAL_GPIO_WritePin (GPIOA ,LED_G_Pin ,GPIO_PIN_RESET);
-		  HAL_Delay(1000);
-		  HAL_GPIO_WritePin (GPIOA ,LED_G_Pin ,GPIO_PIN_SET);
-	  }
-	  else if(HAL_GPIO_ReadPin (GPIOC,KEYB_Pin ) == GPIO_PIN_SET)
-	  {
-		  HAL_GPIO_TogglePin(GPIOA,LED_G_Pin);
-		  HAL_Delay(500);
-	  }
+		HAL_Delay (20);
+	    if(HAL_GPIO_ReadPin (KEYB_GPIO_Port ,KEYB_Pin )==GPIO_PIN_SET )
+	    {
+			if(mode==1 )
+			{
+				MODE_2() ;
+			}
+			else if(mode==2)
+			{
+				MODE_1() ;
+			}
+	    }
+		  while(HAL_GPIO_ReadPin (KEYB_GPIO_Port ,KEYB_Pin )==GPIO_PIN_SET ){};
+			 
+     }
+	  
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
@@ -152,7 +197,7 @@ void SystemClock_Config(void)
 }
 
 /* USER CODE BEGIN 4 */
-
+ 
 /* USER CODE END 4 */
 
 /**
@@ -169,7 +214,8 @@ void Error_Handler(void)
   }
   /* USER CODE END Error_Handler_Debug */
 }
-#ifdef USE_FULL_ASSERT
+
+#ifdef  USE_FULL_ASSERT
 /**
   * @brief  Reports the name of the source file and the source line number
   *         where the assert_param error has occurred.
