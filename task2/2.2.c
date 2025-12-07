@@ -30,9 +30,9 @@
 /* USER CODE BEGIN PTD */
 typedef enum 
 {
-	freq2=0,
-	freq10,
-	freq5,
+	freq1=0,
+	freq2,
+	freq3,
 	freq0
 	
 }Freq;
@@ -175,14 +175,14 @@ void Updatetim (Freq current)
 {
 	HAL_TIM_Base_Stop_IT (&htim2 );
 	switch(current )
-	{case freq2:
-			__HAL_TIM_SET_AUTORELOAD (&htim2 ,50000-1);
-		    break;
-		case freq10:
+	{case freq1:
 			__HAL_TIM_SET_AUTORELOAD (&htim2 ,10000-1);
 		    break;
-		case freq5:
+		case freq2:
 			__HAL_TIM_SET_AUTORELOAD (&htim2 ,20000-1);
+		    break;
+		case freq3:
+			__HAL_TIM_SET_AUTORELOAD (&htim2 ,30000-1);
 		    break;
 		case freq0:
 			__HAL_TIM_SET_AUTORELOAD (&htim2 ,30000-1);
@@ -198,57 +198,27 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 		if(htim->Instance ==TIM2  )
 		{
 		switch(current)
-		{case freq2:
+		{case freq1:
 			HAL_GPIO_WritePin (LED_G_GPIO_Port ,LED_G_Pin ,GPIO_PIN_SET);
 			HAL_GPIO_WritePin (LED_B_GPIO_Port ,LED_B_Pin ,GPIO_PIN_SET);
-			if(HAL_GPIO_ReadPin (LED_R_GPIO_Port ,LED_R_Pin )==GPIO_PIN_SET )
-			{
-				HAL_GPIO_WritePin (LED_R_GPIO_Port ,LED_R_Pin ,GPIO_PIN_RESET);
-			    __HAL_TIM_SET_AUTORELOAD (&htim2 ,25000-1);
-			}
-		    else 
-			{
-				HAL_GPIO_WritePin (LED_R_GPIO_Port ,LED_R_Pin ,GPIO_PIN_SET);
-			    __HAL_TIM_SET_AUTORELOAD (&htim2 ,25000-1);
-		   
-			}
+			HAL_GPIO_TogglePin (LED_R_GPIO_Port ,LED_R_Pin );
 			 break;
-			case freq10:
+			case freq2:
 			HAL_GPIO_WritePin (LED_R_GPIO_Port ,LED_R_Pin ,GPIO_PIN_SET);
 			HAL_GPIO_WritePin (LED_B_GPIO_Port ,LED_B_Pin ,GPIO_PIN_SET);
-			if(HAL_GPIO_ReadPin (LED_G_GPIO_Port ,LED_G_Pin )==GPIO_PIN_SET )
-			{
-				HAL_GPIO_WritePin (LED_G_GPIO_Port ,LED_G_Pin ,GPIO_PIN_RESET);
-			    __HAL_TIM_SET_AUTORELOAD (&htim2 ,5000-1);
-			}
-		    else 
-			{
-				HAL_GPIO_WritePin (LED_G_GPIO_Port ,LED_G_Pin ,GPIO_PIN_SET);
-			    __HAL_TIM_SET_AUTORELOAD (&htim2 ,5000-1);
-		    
-			} break;
-			case freq5:
+			HAL_GPIO_TogglePin (LED_R_GPIO_Port ,LED_G_Pin );
+
+			break;
+			case freq3:
 			HAL_GPIO_WritePin (LED_G_GPIO_Port ,LED_G_Pin ,GPIO_PIN_SET);
 			HAL_GPIO_WritePin (LED_R_GPIO_Port ,LED_R_Pin ,GPIO_PIN_SET);
-			if(HAL_GPIO_ReadPin (LED_B_GPIO_Port ,LED_B_Pin )==GPIO_PIN_SET )
-			{
-				HAL_GPIO_WritePin (LED_B_GPIO_Port ,LED_B_Pin ,GPIO_PIN_RESET);
-			    __HAL_TIM_SET_AUTORELOAD (&htim2 ,10000-1);
-			}
-		    else 
-			{
-				HAL_GPIO_WritePin (LED_B_GPIO_Port ,LED_B_Pin ,GPIO_PIN_SET);
-			    __HAL_TIM_SET_AUTORELOAD (&htim2 ,10000-1);
-		    
-			}
+			HAL_GPIO_TogglePin (LED_R_GPIO_Port ,LED_B_Pin );
 			 break;
 			case freq0:
 			HAL_GPIO_WritePin (LED_G_GPIO_Port ,LED_G_Pin ,GPIO_PIN_SET);
 			HAL_GPIO_WritePin (LED_B_GPIO_Port ,LED_B_Pin ,GPIO_PIN_SET);
-			
 			HAL_GPIO_WritePin (LED_R_GPIO_Port ,LED_R_Pin ,GPIO_PIN_SET);
-			    __HAL_TIM_SET_AUTORELOAD (&htim2 ,30000-1);
-		    break;
+			 break;
 			}
 			
 		}
