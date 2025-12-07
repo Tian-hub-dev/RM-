@@ -119,7 +119,6 @@ HAL_TIM_Base_Start_IT (&htim2 );
 
     /* USER CODE BEGIN 3 */
   }
-  while(HAL_GPIO_ReadPin (KEY_GPIO_Port ,KEY_Pin )==GPIO_PIN_SET );
   /* USER CODE END 3 */
 }
 
@@ -257,3 +256,4 @@ void assert_failed(uint8_t *file, uint32_t line)
   /* USER CODE END 6 */
 }
 #endif /* USE_FULL_ASSERT */
+
