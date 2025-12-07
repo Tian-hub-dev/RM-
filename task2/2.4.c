@@ -242,9 +242,6 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 		calculate_speed ();
 		Position_PID();
 		
-		if (pwm_output < 0) pwm_output = 0;
-        if (pwm_output > 1000) pwm_output = 1000;
-		
 		__HAL_TIM_SET_COMPARE(&htim3, TIM_CHANNEL_3, (uint32_t)pwm_output);
 
     }
@@ -282,3 +279,4 @@ void assert_failed(uint8_t *file, uint32_t line)
   /* USER CODE END 6 */
 }
 #endif /* USE_FULL_ASSERT */
+
